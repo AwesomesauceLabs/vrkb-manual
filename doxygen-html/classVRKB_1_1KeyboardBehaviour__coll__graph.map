@@ -1,0 +1,8 @@
+<map id="VRKB.KeyboardBehaviour" name="VRKB.KeyboardBehaviour">
+<area shape="rect" id="node3" href="$classVRKB_1_1OnConfirmEvent.html" title="VRKB.OnConfirmEvent" alt="" coords="307,56,467,83"/>
+<area shape="rect" id="node5" href="$classVRKB_1_1OnCancelEvent.html" title="VRKB.OnCancelEvent" alt="" coords="309,107,464,133"/>
+<area shape="rect" id="node6" href="$classVRKB_1_1OnKeyPressEvent.html" title="VRKB.OnKeyPressEvent" alt="" coords="301,157,472,184"/>
+<area shape="rect" id="node8" href="$structVRKB_1_1Action.html" title="VRKB.Action" alt="" coords="337,208,437,235"/>
+<area shape="rect" id="node9" href="$classVRKB_1_1KeyboardConfig.html" title="VRKB.KeyboardConfig" alt="" coords="309,259,465,285"/>
+<area shape="rect" id="node10" href="$classVRKB_1_1ColorDictionary.html" title="VRKB.ColorDictionary" alt="" coords="21,259,174,285"/>
+</map>

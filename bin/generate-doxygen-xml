@@ -1,0 +1,22 @@
+#!/bin/bash
+set -eu -o pipefail
+
+if [ $# -ne 1 ]; then
+	echo "Usage: $(basename $0): <vrkb_unity_project_dir>" >&2
+	exit 1
+fi
+vrkb_dir=$(realpath "$1"); shift;
+
+temp_dir=$(mktemp -p /tmp -d doxygen.XXXXXXX)
+cd $temp_dir
+
+doxygen -g - | \
+	(cat; \
+	echo "INPUT=${vrkb_dir}/Assets/VRKB"; \
+	echo "STRIP_FROM_PATH=${vrkb_dir}"; \
+	echo "RECURSIVE=YES"; \
+	echo "GENERATE_XML=YES"; \
+	) | \
+	doxygen - >doxygen.log 2>&1
+
+echo $temp_dir

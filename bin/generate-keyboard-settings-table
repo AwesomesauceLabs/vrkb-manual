@@ -1,0 +1,63 @@
+#!/bin/bash
+set -eu -o pipefail
+
+if [ $# -ne 1 ]; then
+	echo "Usage: $(basename $0): <vrkb_unity_project_dir>" >&2
+	exit 1
+fi
+vrkb_dir=$(realpath "$1"); shift;
+
+# Generate structured XML documentation from the source code
+# using Doxygen.
+
+doxygen_dir=$(generate-doxygen-xml $vrkb_dir)
+cd $doxygen_dir/xml
+
+# Add rows for "Event Callbacks" and "ReloadKeyboardConfigFile".
+# Unlike the other rows of the table, these rows don't correspond
+# to member variable of `KeyboardBehaviour`, and so the descriptions
+# can't be auto-generated.
+#
+# The "Event Callbacks" row should be inserted as the
+# second-last row of the table, in order to correspond
+# with its location in the Unity Inspector window.
+#
+# The "ReloadKeyboardConfigFile" row should be inserted as the
+# last row.
+#
+# Note: I appended `|| true` here because `read` returns
+# 1 on EOF, which would cause the script to exit
+# with an error (because I'm using `set -e`) above.
+
+read -r -d '' event_callbacks_desc <<EOF || true
+Expand this section to configure callback methods for keyboard events
+(e.g. "OnKeyPress", "OnConfirm"). See [Keyboard Events](#keyboard-events)
+for details.
+EOF
+read -r -d '' reload_config_desc <<EOF || true
+Reload key settings from the JSON config file and apply them
+to the keys. (The config file is always reloaded upon entering
+Play Mode, but otherwise reloads must be triggered manually
+with this button.)
+EOF
+
+# remove newlines
+event_callbacks_desc=$(echo "$event_callbacks_desc" | tr '\n' ' ')
+reload_config_desc=$(echo "$reload_config_desc" | tr '\n' ' ')
+
+# Extract the XML documentation from the source code for
+# each public member variable of `KeyboardBehaviour`. These
+# variables represent configuration settings for the keyboard.
+
+xq -r '
+   .doxygen.compounddef.sectiondef[].memberdef[]
+   | select(."@kind"? == "variable")
+   | select(."@prot" == "public")
+   | select(.briefdescription.para | type == "string")
+   | .name,.briefdescription.para' \
+	classVRKB_1_1KeyboardBehaviour.xml \
+	| paste - -  \
+	| (echo -e "Parameter\tDescription"; cat) \
+	| sed "$(printf '$e echo "%s\t%s"' 'EventCallbacks' "${event_callbacks_desc}")" \
+	| (cat; echo -e "ReloadKeyboardConfigFile\t"${reload_config_desc}) \
+	| csv2md -d$'\t'

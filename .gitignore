@@ -1,0 +1,9 @@
+# Doxygen
+/latex
+doxygen.log
+
+# Jekyll
+/_site
+
+# Ruby
+Gemfile.lock

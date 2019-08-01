@@ -1,0 +1,81 @@
+#!/bin/bash
+set -eu -o pipefail
+
+if [ $# -ne 1 ]; then
+	echo "Usage: $(basename $0): <vrkb_unity_project_dir>" >&2
+	exit 1
+fi
+vrkb_dir=$(realpath "$1"); shift;
+
+# Generate structured XML documentation from the source code
+# using Doxygen.
+
+doxygen_dir=$(generate-doxygen-xml $vrkb_dir)
+cd $doxygen_dir/xml
+
+# Extract the XML documentation from the source code for
+# each public `UnityEvent` variable of `KeyboardBehaviour`
+# (e.g. `OnKeyPress`).
+
+xml_file=classVRKB_1_1KeyboardBehaviour.xml
+event_objects_query='
+.doxygen.compounddef.sectiondef[].memberdef[]
+| select(."@kind"? == "variable")
+| select(."@prot" == "public")
+| select(has("name"))
+| select(.name | match("On"))
+'
+event_names_query="$event_objects_query | .name"
+
+for name in $(xq -r "$event_names_query" $xml_file); do
+
+	# print markdown heading with event name
+
+	echo "#### *${name}*"
+	echo
+
+	# print description of event
+
+	xq -r --arg name $name \
+		"${event_objects_query}
+		| select(.name == \$name)
+		| .briefdescription.para.\"#text\"" $xml_file
+	echo
+
+	# Print 2-column table of callback parameter types and descriptions.
+	#
+	# Notes:
+	#
+	# (1) `parameteritem` is an array when there are multiple parameters
+	# and an object (i.e. dictionary) when there is only a single
+	# parameter. The following line converts `parameteritem` to
+	# an array for all cases:
+	#
+	#     if type != \"array\" then [.] else . end
+	#
+	# (2) The structure for `parametername` is different when
+	# the type in a user-defined (e.g. `KeyBehaviour`).
+
+	echo "Callback methods for this event are passed the following parameters:"
+	echo
+
+	xq -r --arg name $name \
+	"${event_objects_query}
+	| select(.name == \$name)
+	| .briefdescription.para.parameterlist.parameteritem
+	| if type != \"array\" then [.] else . end
+	| .[]
+	| if .parameternamelist.parametername | type == \"object\" then
+			.parameternamelist.parametername |= .ref.\"#text\"
+		else
+			.
+		end
+	| .parameternamelist.parametername,.parameterdescription.para
+	" \
+	$xml_file \
+		| paste - - \
+		| (echo -e "Argument Type\tDescription"; cat) \
+		| csv2md -d$'\t'
+	echo
+
+done
