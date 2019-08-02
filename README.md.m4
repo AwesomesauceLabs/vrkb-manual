@@ -160,16 +160,16 @@ In order for a dictionary entry to be correctly mapped to the corresponding key,
 
 The complete list of settings available for individual keys are:
 
-| Setting                 | Possible Values         | Description                                                                                                                               |
-|-------------------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
-| "action"                | "cancel", "confirm"     | Cancels/confirms the text typed by the user and triggers `OnCancel`/`OnConfirm` keyboard events (see [Keyboard Events](#keyboard-events)) |
-| "enableLayerForNextKey" | keyboard layer name     | Temporarily enable a keyboard layer for the next key press (see [Keyboard Layers](#keyboard-layers))                                      |
-| "enableLayer"           | keyboard layer name     | Enable a keyboard layer (see [Keyboard Layers](#keyboard-layers))                                                                         |
-| "fontSize"              | float                   | Font size used for text label                                                                                                             |
-| "image"                 | Unity Resource Path   | Image shown on key (e.g. green checkmark icon) (see [Using Images on Keys](#using-images-on-keys))                                                                                            |
-| "imageColor"            | color name or hex value | Color applied to "image" (e.g. "red").  Replaces white areas of the image with the specified color. (see [Using Images on Keys](#using-images-on-keys)) |
-| "label"                 | any string              | Text used to label a key (e.g. "q", "Enter")                                                                                              |
-| "output"                | any string              | The output characters generated when the key is pressed (e.g. "q", "w").                                                                  |
+| Setting                 | Possible Values         | Description                                                                                                                                                                         |
+|-------------------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| "action"                | "cancel", "confirm"     | Cancels/confirms the text typed by the user and triggers `OnCancel`/`OnConfirm` keyboard events (see [Keyboard Events](#keyboard-events))                                           |
+| "enableLayerForNextKey" | keyboard layer name     | Temporarily enable a keyboard layer for the next key press (see [Keyboard Layers](#keyboard-layers))                                                                                |
+| "enableLayer"           | keyboard layer name     | Enable a keyboard layer (see [Keyboard Layers](#keyboard-layers))                                                                                                                   |
+| "fontSize"              | float                   | Font size used for text label                                                                                                                                                       |
+| "image"                 | Unity Resource Path     | Image shown on key (e.g. green checkmark icon) (see [Using Images on Keys](#using-images-on-keys))                                                                                  |
+| "imageColor"            | color name or hex value | Color applied to "image" (e.g. "red" or "#FF0000FF" in RGBA form).  Replaces white areas of the image with the specified color. (see [Using Images on Keys](#using-images-on-keys)) |
+| "label"                 | any string              | Text used to label a key (e.g. "q", "Enter")                                                                                                                                        |
+| "output"                | any string              | The output characters generated when the key is pressed (e.g. "q", "w").                                                                                                            |
 
 You can specify default values the above key properties by adding a top-level entry to the JSON file called "keyDefaults". For example, the [default JSON config file](_EXAMPLE_CONFIG_FILE_PATH_) (`Assets/VRKB/Config/qwerty-compact.json`) contains a "keyDefaults" entry near the top of the file that looks like:
 
