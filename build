@@ -56,7 +56,7 @@ doxygen -g - | \
 	(cat; \
 	 echo "INPUT=${vrkb_dir}/Assets/VRKB"; \
 	 echo "PROJECT_NAME=\"VRKB\""; \
-	 echo "PROJECT_BRIEF=\"virtual reality keyboard\""; \
+	 echo "PROJECT_BRIEF=\"Virtual Reality Keyboard\""; \
 	 echo "STRIP_FROM_PATH=${vrkb_dir}"; \
 	 echo "EXTRACT_ALL=NO"; \
 	 echo "GENERATE_LATEX=NO"; \
