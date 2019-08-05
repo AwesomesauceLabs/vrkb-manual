@@ -8,7 +8,10 @@
 
 
 
-# VRKB Manual
+# VRKB Manual: Virtual Reality Keyboard
+
+* Online documentation: <https://awesomesaucelabs.github.io/vrkb-manual>
+* Support e-mail: <mailto:awesomesaucelabs@gmail.com>
 
 
 ## Table of Contents
